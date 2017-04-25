@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>
+    Server Side
+  </title>
+</head>
+
+<body>
+  <h1>
+    <%= title %>
+  </h1>
+  <p>
+    <%= date %>
+  </p>
+  <p>
+    <% for(i=0; i<list.length; i++){ %>
+      <li>
+        <%= list[i] %>
+      </li>
+      <% } %>
+  </p>
+</body>
+
+</html>

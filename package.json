@@ -7,7 +7,10 @@
     "ejs": "^2.5.6",
     "express": "^4.15.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gulp-nodemon": "^2.2.1",
+    "nodemon": "^1.11.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

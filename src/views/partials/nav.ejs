@@ -15,10 +15,10 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
 
-                  <% for(i=0; i<list.length; i++){ %>
+                  <% for(i=0; i < nav.length; i++){ %>
                     <li>
-                      <a href="#">
-                      <%= list[i] %>
+                      <a href="<%= nav[i].link %>">
+                      <%= nav[i].title %>
                     </a>
                     </li>
                     <% } %>

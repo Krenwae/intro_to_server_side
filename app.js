@@ -1,6 +1,7 @@
 var express = require('express');
 
 var mongodb = require('mongodb');
+var objectId = require('mongodb').ObjectID;
 
 var app = express();
 var port= 5000;
@@ -21,79 +22,71 @@ app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
+var methodOverride = require('method-override')
+app.use(methodOverride('_method'));
+
 app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
-var locals = {
-  title: "Hello from Express",
-  date: new Date(),
-  list: ['a', 'b', 'c']
-};
-
-app.get('/', function(req, res){
-  res.render("index", locals);
-});
-
-var users=[
+var nav = [
   {
-    firstName: "Spencer",
-    lastName: "Sholander"
+    title: 'Movies',
+    link: '/movies'
   },
   {
-    firstName: "Nick",
-    lastName: "Cappasso"
-  },
-  {
-    firstName: "Ian",
-    lastName: "Sorensen"
+    title: 'About',
+    link: '/about'
   }
 ];
 
-app.get('/addUsers', function(req, res){
-  var url = 'mongodb://localhost:27017/usersApp';
+app.use(function(req, res, next){
+  res.locals.nav = nav;
+  next();
+});
 
+app.get('/', function(req, res){
+  res.render("index");
+});
+
+var url = 'mongodb://localhost:27017/movieApp'
+
+app.get('/movies', function(req, res){
   mongodb.connect(url, function(err, db){
-    var collection = db.collection('users');
-    collection.insertMany(users, function(err, results){
-      res.send(results);
-      db.close();
+    var collection = db.collection('movies');
+    collection.find({}).toArray(
+      function(err, results){
+        res.render("movieList", {movieList: results});
+      }
+    )
+  })
+});
+
+app.post('/movies', function(req, res){
+  mongodb.connect(url, function(err, db){
+    var collection = db.collection('movies');
+    var movie = {
+      title: req.body.title,
+      year: req.body.year
+    };
+    collection.insertOne(movie, function(err, results){
+      res.redirect('/movies');
     });
   });
 });
 
-app.get('/users', function(req, res){
- res.send(users);
-});
+app.delete('/movies/:id', function(req, res){
+  var id = new objectId(req.params.id);
+  console.log('Deleting...' + id);
 
-app.get('/users/:id', function(req, res){
-  console.log(req.params);
-  var user = users[req.params.id];
-  if(user) res.send(user);
-  else res.sendStatus(404);
-});
+  mongodb.connect(url, function(err, db){
+    var collection = db.collection('movies');
 
-app.post('/users', function(req, res){
-  console.log("POST request to /users");
-  console.log(req.body);
-  users.push(
-    {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName
-    }
-  );
-  res.send(users);
-});
-
-app.delete('/users/:id', function(req, res){
-  var id = req.params.id;
-  console.log("DELETE request to /users/" + id);
-  if(useres.length >= (id + 1)){
-    console.log("Deleting user " + users[id].firstName);
-    users.splice(id, 1);
-  }
-  res.send(users);
+    collection.deleteOne({_id: id}, function(err, results){
+      res.redirect('/movies');
+    });
+  });
 });
 
 app.listen(port, function(err){
-  console.log("Listening on port: " + port)
+  console.log("Listening on port: " + port);
 });

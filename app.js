@@ -1,9 +1,17 @@
 var express = require('express');
 
+var mongodb = require('mongodb');
+
 var app = express();
 var port= 5000;
 
 var bodyParser = require('body-parser');
+
+
+app.use(function(req, res, next){
+  console.log("Got request "+ req.params);
+  next();
+});
 
 // parses x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -40,6 +48,18 @@ var users=[
     lastName: "Sorensen"
   }
 ];
+
+app.get('/addUsers', function(req, res){
+  var url = 'mongodb://localhost:27017/usersApp';
+
+  mongodb.connect(url, function(err, db){
+    var collection = db.collection('users');
+    collection.insertMany(users, function(err, results){
+      res.send(results);
+      db.close();
+    });
+  });
+});
 
 app.get('/users', function(req, res){
  res.send(users);

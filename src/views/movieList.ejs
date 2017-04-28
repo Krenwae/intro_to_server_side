@@ -30,6 +30,7 @@
                 <tr>
                   <td>Title</td>
                   <td>Year</td>
+                  <td>Description</td>
                 </tr>
               </thead>
               <tbody>
@@ -37,6 +38,7 @@
                   <tr>
                     <td><%= movieList[i].title %></td>
                     <td><%= movieList[i].year %></td>
+                    <td><%= movieList[i].description %></td>
                     <td>
                       <form method="POST" action="/movies/<%= movieList[i]._id %>?_method=delete" enctype="application/x-www-form-urlencoded">
                         <input type="submit" value="Delete" class="btn btn-danger" />
@@ -62,6 +64,7 @@
             <form method="post" action="/movies">
               <input type="text" name="title">
               <input type="text" name="year">
+              <input type="text" name="description">
               <input type="submit"/>
             </form>
           </div>

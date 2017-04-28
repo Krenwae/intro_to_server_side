@@ -79,7 +79,8 @@ app.post('/movies', function(req, res){
     var collection = db.collection('movies');
     var movie = {
       title: req.body.title,
-      year: req.body.year
+      year: req.body.year,
+      description: req.body.description
     };
     collection.insertOne(movie, function(err, results){
       res.redirect('/movies');

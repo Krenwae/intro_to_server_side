@@ -61,6 +61,19 @@ app.get('/movies', function(req, res){
   })
 });
 
+app.get('/movies/:id', function(req, res){
+  var id = new objectId(req.params.id); // <get id from request body>;
+
+  // here we'll connect to MongoDB and then lookup one (via the findOne method) movie
+  // to return back to our new view
+  mongodb.connect(url, function(err, db){
+    var collection = db.collection('movies');
+    collection.findOne({_id: id}, function(err, results){
+        res.render('movieView', { movie: results });
+      })
+  });
+});
+
 app.post('/movies', function(req, res){
   mongodb.connect(url, function(err, db){
     var collection = db.collection('movies');

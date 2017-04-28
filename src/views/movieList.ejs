@@ -38,8 +38,13 @@
                     <td><%= movieList[i].title %></td>
                     <td><%= movieList[i].year %></td>
                     <td>
-                      <form method="POST" action="/movies/ <%= movieList[i]._id %> ?_method=delete" enctype="application/x-www-form-urlencoded">
+                      <form method="POST" action="/movies/<%= movieList[i]._id %>?_method=delete" enctype="application/x-www-form-urlencoded">
                         <input type="submit" value="Delete" class="btn btn-danger" />
+                      </form>
+                    </td>
+                    <td>
+                      <form method="POST" action="/movies/<%= movieList[i]._id %>?_method=get" enctype="application/x-www-form-urlencoded">
+                        <input type="submit" value="Get" class="btn btn-danger" />
                       </form>
                     </td>
                   </tr>
